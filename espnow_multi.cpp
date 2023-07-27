@@ -74,6 +74,7 @@ esp_err_t EspnowMulti::send(std::weak_ptr<EspnowSender> sender, const uint8_t* p
     xSemaphoreGive(send_mutex_);
 
     return ret;
+}
 
 SemaphoreHandle_t EspnowMulti::accessMutex() {
     static auto mtx = xSemaphoreCreateMutex();
