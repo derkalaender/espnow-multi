@@ -69,8 +69,11 @@ esp_err_t EspnowMulti::send(std::weak_ptr<EspnowSender> sender, const uint8_t* p
     last_sender_ = std::move(sender);
     // register peer before sending
     registerPeer(peer_addr, channel, ifidx);
-    return esp_now_send(peer_addr, data, len);
-}
+
+    esp_err_t ret = esp_now_send(peer_addr, data, len);
+    xSemaphoreGive(send_mutex_);
+
+    return ret;
 
 SemaphoreHandle_t EspnowMulti::accessMutex() {
     static auto mtx = xSemaphoreCreateMutex();
